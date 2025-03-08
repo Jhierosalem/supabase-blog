@@ -40,7 +40,7 @@ export default function Home() {
   // Fetch blogs
   const fetchBlogs = async () => {
     try {
-      const { data, error } = await supabase.from('blogs').select('*');
+      const { error } = await supabase.from('blogs').select('*');
       if (error) throw error;
       // Update the blog list in the parent component (if needed)
     } catch (error) {
@@ -78,7 +78,7 @@ export default function Home() {
           {showBlogForm ? (
             <BlogForm blog={selectedBlog} onClose={handleUpdateBlogList} fetchBlogs={fetchBlogs} />
           ) : (
-            <BlogList onEditBlog={handleBlogAction} />
+            <BlogList onEditBlog={handleBlogAction} fetchBlogs={undefined} />
           )}
         </>
       )}
