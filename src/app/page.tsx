@@ -1,17 +1,17 @@
-'use client'; // Mark this file as a client component
+'use client';
 import Auth from '@/components/Auth';
 import BlogList from '@/components/BlogList';
 import BlogForm from '@/components/BlogForm';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { User } from '@supabase/supabase-js'; // Directly import the User type
+import { User } from '@supabase/supabase-js';
 
 export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [showBlogForm, setShowBlogForm] = useState(false);
-  const [selectedBlog, setSelectedBlog] = useState(null); // For editing a blog
-  const [loading, setLoading] = useState(true); // Loading state for auth check
-  const [error, setError] = useState(''); // Error state
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   // Check if the user is logged in
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Home() {
         if (error) throw error;
         setUser(user);
       } catch (error) {
-        setError(error.message);
+        setError(error instanceof Error ? error.message : 'An unknown error occurred');
       } finally {
         setLoading(false);
       }
@@ -40,35 +40,46 @@ export default function Home() {
   // Fetch blogs
   const fetchBlogs = async () => {
     try {
-      const { error } = await supabase.from('blogs').select('*');
+      const { data, error } = await supabase.from('blogs').select('*');
       if (error) throw error;
-      // Update the blog list in the parent component (if needed)
+      return data; // Return the fetched blogs
     } catch (error) {
-      setError(error.message);
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      throw error;
+    }
+  };
+
+  // Handle deleting a blog
+  const handleDeleteBlog = async (blogId: string) => {
+    try {
+      const { error } = await supabase.from('blogs').delete().eq('id', blogId);
+      if (error) throw error;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An unknown error occurred');
     }
   };
 
   // Handle creating or editing a blog
   const handleBlogAction = (blog = null) => {
-    setSelectedBlog(blog); // Set the blog to edit (or null for creating a new blog)
-    setShowBlogForm(true); // Show the BlogForm
+    setSelectedBlog(blog);
+    setShowBlogForm(true);
   };
 
   // Handle updating the blog list after editing or creating a blog
   const handleUpdateBlogList = () => {
-    setShowBlogForm(false); // Hide the BlogForm
-    setSelectedBlog(null); // Reset the selected blog
+    setShowBlogForm(false);
+    setSelectedBlog(null);
     fetchBlogs(); // Refresh the blog list
   };
 
   if (loading) {
-    return <p>Loading...</p>; // Show a loading spinner or message
+    return <p>Loading...</p>;
   }
 
   return (
     <div>
       <h1>Welcome to My Blog</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display errors */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       {!user ? (
         <Auth />
       ) : (
@@ -78,7 +89,7 @@ export default function Home() {
           {showBlogForm ? (
             <BlogForm blog={selectedBlog} onClose={handleUpdateBlogList} fetchBlogs={fetchBlogs} />
           ) : (
-            <BlogList onEditBlog={handleBlogAction} fetchBlogs={undefined} />
+            <BlogList onEditBlog={handleBlogAction} fetchBlogs={fetchBlogs} onDeleteBlog={handleDeleteBlog} />
           )}
         </>
       )}

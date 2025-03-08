@@ -1,27 +1,28 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/lib/supabaseClient'; // eslint-disable-line @typescript-eslint/no-unused-vars
+import PropTypes from 'prop-types'; // Import PropTypes
 import './BlogList.css'; // Import the CSS file
 
-export default function BlogList({ onEditBlog }) {
+export default function BlogList({ onEditBlog, fetchBlogs, onDeleteBlog }) {
   const [blogs, setBlogs] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch blogs
-  const fetchBlogs = async () => {
+  // Fetch blogs for pagination
+  const fetchBlogsInternal = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('*')
-        .range((page - 1) * 10, page * 10 - 1);
-
-      if (error) throw error;
-      setBlogs(data);
+      const data = await fetchBlogs(); // Use the fetchBlogs function passed from the parent
+      setBlogs(data || []); // Ensure data is not undefined
     } catch (error) {
-      setError(error.message);
+      // Handle the error as an unknown type
+      if (error instanceof Error) {
+        setError(error.message); // Safely access error.message
+      } else {
+        setError('An unknown error occurred'); // Fallback for non-Error types
+      }
     } finally {
       setLoading(false);
     }
@@ -31,18 +32,27 @@ export default function BlogList({ onEditBlog }) {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       try {
-        const { error } = await supabase.from('blogs').delete().eq('id', id);
-        if (error) throw error;
-        alert('Blog deleted successfully!');
-        fetchBlogs(); // Refresh the blog list after deletion
+        await onDeleteBlog(id); // Use the onDeleteBlog prop to delete the blog
+        await fetchBlogsInternal(); // Refresh the blog list after deletion
       } catch (error) {
-        setError(error.message);
+        // Handle the error as an unknown type
+        if (error instanceof Error) {
+          setError(error.message); // Safely access error.message
+        } else {
+          setError('An unknown error occurred'); // Fallback for non-Error types
+        }
       }
     }
   };
 
+  // Refresh the blog list
+  const handleRefresh = async () => {
+    await fetchBlogsInternal(); // Call the internal fetch function to refresh the data
+  };
+
+  // Fetch blogs when the component mounts or the page changes
   useEffect(() => {
-    fetchBlogs();
+    fetchBlogsInternal(); // Use the internal fetch function for pagination
   }, [page]);
 
   return (
@@ -50,6 +60,9 @@ export default function BlogList({ onEditBlog }) {
       <h2>Blog List</h2>
       {loading && <p className="loading-message">Loading...</p>}
       {error && <p className="error-message">{error}</p>}
+      <button onClick={handleRefresh} className="refresh-button">
+        Refresh
+      </button>
       <ul>
         {blogs.map((blog) => (
           <li key={blog.id}>
@@ -70,3 +83,10 @@ export default function BlogList({ onEditBlog }) {
     </div>
   );
 }
+
+// Define prop types using PropTypes
+BlogList.propTypes = {
+  onEditBlog: PropTypes.func.isRequired,
+  fetchBlogs: PropTypes.func.isRequired, // Add fetchBlogs to prop types
+  onDeleteBlog: PropTypes.func.isRequired,
+};
