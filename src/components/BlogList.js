@@ -45,11 +45,6 @@ export default function BlogList({ onEditBlog, fetchBlogs, onDeleteBlog }) {
     }
   };
 
-  // Refresh the blog list
-  const handleRefresh = async () => {
-    await fetchBlogsInternal(); // Call the internal fetch function to refresh the data
-  };
-
   // Fetch blogs when the component mounts or the page changes
   useEffect(() => {
     fetchBlogsInternal(); // Use the internal fetch function for pagination
@@ -60,9 +55,6 @@ export default function BlogList({ onEditBlog, fetchBlogs, onDeleteBlog }) {
       <h2>Blog List</h2>
       {loading && <p className="loading-message">Loading...</p>}
       {error && <p className="error-message">{error}</p>}
-      <button onClick={handleRefresh} className="refresh-button">
-        Refresh
-      </button>
       <ul>
         {blogs.map((blog) => (
           <li key={blog.id}>
