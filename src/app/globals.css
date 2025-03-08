@@ -1,26 +1,122 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Global Styles for Auth Container */
+.auth-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Title Styling */
+.auth-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  background: linear-gradient(90deg, #0070f3, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Subtitle Styling */
+.auth-subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Input Field Styling */
+.auth-input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  color: black; /* Ensure text color is black */
+}
+
+.auth-input::placeholder {
+  color: #999; /* Placeholder text color */
+}
+
+.auth-input:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 8px rgba(0, 112, 243, 0.3); /* Add a glow effect */
+  outline: none;
+}
+
+/* Button Styling */
+.auth-button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background: linear-gradient(90deg, #0070f3, #00c6ff);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.auth-button:hover {
+  background: linear-gradient(90deg, #005bb5, #0099cc);
+  transform: translateY(-2px); /* Add a slight lift effect */
+}
+
+.auth-button:active {
+  transform: translateY(0); /* Reset lift effect on click */
+}
+
+/* Footer Link Styling */
+.auth-footer {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-footer a {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Forgot Password Link Styling */
+.forgot-password {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Sign Up Link Styling */
+.sign-up-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.sign-up-link a {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.sign-up-link a:hover {
+  text-decoration: underline;
 }

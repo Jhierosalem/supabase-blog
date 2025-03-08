@@ -1,101 +1,87 @@
-import Image from "next/image";
+'use client'; // Mark this file as a client component
+import Auth from '@/components/Auth';
+import BlogList from '@/components/BlogList';
+import BlogForm from '@/components/BlogForm';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+import { User } from '@supabase/supabase-js'; // Directly import the User type
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [user, setUser] = useState<User | null>(null);
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null); // For editing a blog
+  const [loading, setLoading] = useState(true); // Loading state for auth check
+  const [error, setError] = useState(''); // Error state
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  // Check if the user is logged in
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (error) throw error;
+        setUser(user);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user || null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Fetch blogs
+  const fetchBlogs = async () => {
+    try {
+      const { data, error } = await supabase.from('blogs').select('*');
+      if (error) throw error;
+      // Update the blog list in the parent component (if needed)
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  // Handle creating or editing a blog
+  const handleBlogAction = (blog = null) => {
+    setSelectedBlog(blog); // Set the blog to edit (or null for creating a new blog)
+    setShowBlogForm(true); // Show the BlogForm
+  };
+
+  // Handle updating the blog list after editing or creating a blog
+  const handleUpdateBlogList = () => {
+    setShowBlogForm(false); // Hide the BlogForm
+    setSelectedBlog(null); // Reset the selected blog
+    fetchBlogs(); // Refresh the blog list
+  };
+
+  if (loading) {
+    return <p>Loading...</p>; // Show a loading spinner or message
+  }
+
+  return (
+    <div>
+      <h1>Welcome to My Blog</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display errors */}
+      {!user ? (
+        <Auth />
+      ) : (
+        <>
+          <button onClick={() => supabase.auth.signOut()}>Logout</button>
+          <button onClick={() => handleBlogAction()}>Create New Blog</button>
+          {showBlogForm ? (
+            <BlogForm blog={selectedBlog} onClose={handleUpdateBlogList} fetchBlogs={fetchBlogs} />
+          ) : (
+            <BlogList onEditBlog={handleBlogAction} />
+          )}
+        </>
+      )}
     </div>
   );
 }

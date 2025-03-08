@@ -1,0 +1,103 @@
+.authContainer {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .authTitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    background: linear-gradient(90deg, #0070f3, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .authSubtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  
+  .authInput {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: black; /* Ensure text color is black */
+  }
+  
+  .authInput::placeholder {
+    color: #999; /* Placeholder text color */
+  }
+  
+  .authInput:focus {
+    border-color: #0070f3;
+    box-shadow: 0 0 8px rgba(0, 112, 243, 0.3); /* Add a glow effect */
+    outline: none;
+  }
+  
+  .authButton {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: linear-gradient(90deg, #0070f3, #00c6ff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+  }
+  
+  .authButton:hover {
+    background: linear-gradient(90deg, #005bb5, #0099cc);
+    transform: translateY(-2px); /* Add a slight lift effect */
+  }
+  
+  .authButton:active {
+    transform: translateY(0); /* Reset lift effect on click */
+  }
+  
+  .authButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .forgotPassword {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #0070f3;
+    text-decoration: none;
+  }
+  
+  .forgotPassword:hover {
+    text-decoration: underline;
+  }
+  
+  .signUpLink {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .signUpLink a {
+    color: #0070f3;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .signUpLink a:hover {
+    text-decoration: underline;
+  }

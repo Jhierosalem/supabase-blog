@@ -1,0 +1,149 @@
+/* General container styling */
+.blog-list {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #f9f9f9, #e6f4ff);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .blog-list h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #007bff, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Loading and error message styling */
+  .blog-list .loading-message,
+  .blog-list .error-message {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+  }
+  
+  .blog-list .loading-message {
+    color: #007bff;
+  }
+  
+  .blog-list .error-message {
+    color: #ff4d4d;
+  }
+  
+  /* List styling */
+  .blog-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .blog-list ul li {
+    background: white;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .blog-list ul li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .blog-list ul li h3 {
+    margin: 0 0 10px;
+    color: #007bff;
+    font-size: 1.5rem;
+  }
+  
+  .blog-list ul li p {
+    margin: 0 0 15px;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .blog-list ul li button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #ff6f61, #ff4d4d);
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .blog-list ul li button:hover {
+    background: linear-gradient(135deg, #ff4d4d, #ff6f61);
+  }
+  
+  /* Pagination styling */
+  .blog-list .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .blog-list .pagination button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #007bff, #00bfff);
+    color: white;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background 0.3s ease;
+  }
+  
+  .blog-list .pagination button:hover {
+    background: linear-gradient(135deg, #00bfff, #007bff);
+  }
+  
+  .blog-list .pagination button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .blog-list .pagination span {
+    margin: 0 10px;
+    color: #333;
+    font-size: 1.1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .blog-list {
+      padding: 15px;
+    }
+  
+    .blog-list h2 {
+      font-size: 1.8rem;
+    }
+  
+    .blog-list ul li {
+      padding: 15px;
+    }
+  
+    .blog-list ul li h3 {
+      font-size: 1.3rem;
+    }
+  
+    .blog-list ul li p {
+      font-size: 0.9rem;
+    }
+  
+    .blog-list .pagination button {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+  
+    .blog-list .pagination span {
+      font-size: 1rem;
+    }
+  }
